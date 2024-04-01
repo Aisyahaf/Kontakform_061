@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FormKontak extends StatefulWidget {
   const FormKontak({super.key});
@@ -12,7 +15,23 @@ class _FormKontakState extends State<FormKontak> {
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
   final _alamatController = TextEditingController();
-  final _notelepon = TextEditingController();
+  final _noteleponController = TextEditingController();
+
+  File? _image;
+  final _imagePicker = ImagePicker();
+
+  Future<void> getImage() async {
+    final XFile? pickedFile =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print("No Image Selected");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +69,17 @@ class _FormKontakState extends State<FormKontak> {
                 child: TextFormField(
                   decoration: const InputDecoration(
                       labelText: "No Telepon", hintText: "Masukkan No Telepon"),
-                  controller: _notelepon,
+                  controller: _noteleponController,
                 ),
               ),
+
+              _image == null
+              ? const Text("Tidak ada gambar yang dipilih")
+              : Image.file(_image!),
+              ElevatedButton(
+                onPressed: getImage, 
+                child: const Text("Pilih Gambar")
+              )
             ],
           ),
         ));

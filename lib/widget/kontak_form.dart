@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:project3_kontakform/controller/kontak_controller.dart';
+import 'package:project3_kontakform/model/kontak.dart';
 
 class FormKontak extends StatefulWidget {
   const FormKontak({super.key});
@@ -72,13 +74,31 @@ class _FormKontakState extends State<FormKontak> {
                   controller: _noteleponController,
                 ),
               ),
-
               _image == null
-              ? const Text("Tidak ada gambar yang dipilih")
-              : Image.file(_image!),
+                  ? const Text("Tidak ada gambar yang dipilih")
+                  : Image.file(_image!),
               ElevatedButton(
-                onPressed: getImage, 
-                child: const Text("Pilih Gambar")
+                  onPressed: getImage, child: const Text("Pilih Gambar")),
+              Container(
+                margin: const EdgeInsets.all(10),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        var result = await KontakController().addPerson(
+                          Kontak(
+                              nama: _namaController.text,
+                              email: _emailController.text,
+                              alamat: _alamatController.text,
+                              telepon: _noteleponController.text,
+                              foto: _image!.path),
+                          _image,
+                        );
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(result['message'],),),);
+                      }
+                    },
+                    child: const Text("Simpan")),
               )
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project3_kontakform/controller/kontak_controller.dart';
 import 'package:project3_kontakform/model/kontak.dart';
+import 'package:project3_kontakform/screen/home_view.dart';
 
 class FormKontak extends StatefulWidget {
   const FormKontak({super.key});
@@ -14,6 +15,7 @@ class FormKontak extends StatefulWidget {
 
 class _FormKontakState extends State<FormKontak> {
   final _formKey = GlobalKey<FormState>();
+  final KontakController _controller = KontakController();
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
   final _alamatController = TextEditingController();
@@ -84,21 +86,30 @@ class _FormKontakState extends State<FormKontak> {
                 child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        var result = await KontakController().addPerson(
-                          Kontak(
-                              nama: _namaController.text,
-                              email: _emailController.text,
-                              alamat: _alamatController.text,
-                              telepon: _noteleponController.text,
-                              foto: _image!.path),
-                          _image,
-                        );
+                        _formKey.currentState!.save();
+                        var result = await _controller.addPerson(
+                            Kontak(
+                                nama: _namaController.text,
+                                email: _emailController.text,
+                                alamat: _alamatController.text,
+                                telepon: _noteleponController.text,
+                                foto: _image!.path),
+                            _image);
+
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(result['message'],),),);
+                          SnackBar(content: Text(result['message'])),
+                        );
+
+                        Navigator.pushAndRemoveUntil(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomeView()),
+                            (route) => false
+                        );
                       }
                     },
-                    child: const Text("Simpan")),
+                    child: const Text("Submit")),
               )
             ],
           ),

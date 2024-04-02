@@ -5,7 +5,7 @@ import 'package:project3_kontakform/model/kontak.dart';
 import 'package:project3_kontakform/service/kontak_service.dart';
 
 class KontakController {
-  final kontakService = KontakService();
+  final KontakService _service = KontakService();
 
   Future<Map<String,dynamic>> addPerson(Kontak person, File? file)async{
     Map<String, String> data = {
@@ -16,9 +16,9 @@ class KontakController {
     };
     
     try{
-    var response = await kontakService.addPerson(data, file);
+    var response = await _service.addPerson(data, file);
 
-    if(response.statusCode == 201){
+    if(response.statusCode == 200){
         return{
           'success' : true,
           'message' : 'Data berhasil disimpan',
@@ -48,7 +48,7 @@ class KontakController {
 
   Future<List<Kontak>> getPeople() async{
     try{
-      List<dynamic> peopleData = await kontakService.fetchPeople();
+      List<dynamic> peopleData = await _service.fetchPeople();
       List<Kontak> people = 
             peopleData.map((json) => Kontak.fromMap(json)).toList();
       return people;

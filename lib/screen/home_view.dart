@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project3_kontakform/controller/kontak_controller.dart';
 import 'package:project3_kontakform/model/kontak.dart';
+import 'package:project3_kontakform/widget/kontak_form.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -20,6 +21,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Daftar Kontak"),
@@ -51,6 +53,15 @@ class _HomeViewState extends State<HomeView> {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FormKontak())
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

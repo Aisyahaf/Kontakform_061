@@ -36,11 +36,11 @@ class KontakService {
           "Accept": "application/json",
         });
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       final Map<String, dynamic> decodedResponse = json.decode(response.body);
       return decodedResponse['people'];
     } else {
-      throw Exception('Failed to load people: ${response.reasonPhrase}');
+      throw Exception('Failde to load people: ${response.reasonPhrase}');
     }
   }
 }

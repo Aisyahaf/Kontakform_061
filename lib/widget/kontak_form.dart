@@ -32,6 +32,7 @@ class _FormKontakState extends State<FormKontak> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
+        // ignore: avoid_print
         print("No Image Selected");
       }
     });
@@ -39,80 +40,87 @@ class _FormKontakState extends State<FormKontak> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Nama", hintText: "Masukkan Nama"),
-                  controller: _namaController,
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: const Text("Form Kontak")
+      // ),
+      body: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Nama", hintText: "Masukkan Nama"),
+                    controller: _namaController,
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Email", hintText: "Masukkan Email"),
-                  controller: _emailController,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Email", hintText: "Masukkan Email"),
+                    controller: _emailController,
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Alamat", hintText: "Masukkan Alamat"),
-                  controller: _alamatController,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Alamat", hintText: "Masukkan Alamat"),
+                    controller: _alamatController,
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "No Telepon", hintText: "Masukkan No Telepon"),
-                  controller: _noteleponController,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "No Telepon", hintText: "Masukkan No Telepon"),
+                    controller: _noteleponController,
+                  ),
                 ),
-              ),
-              _image == null
-                  ? const Text("Tidak ada gambar yang dipilih")
-                  : Image.file(_image!),
-              ElevatedButton(
-                  onPressed: getImage, child: const Text("Pilih Gambar")),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        var result = await _controller.addPerson(
-                            Kontak(
-                                nama: _namaController.text,
-                                email: _emailController.text,
-                                alamat: _alamatController.text,
-                                telepon: _noteleponController.text,
-                                foto: _image!.path),
-                            _image);
-
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(result['message'])),
-                        );
-
-                        Navigator.pushAndRemoveUntil(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomeView()),
-                            (route) => false
-                        );
-                      }
-                    },
-                    child: const Text("Submit")),
-              )
-            ],
-          ),
-        ));
+                _image == null
+                    ? const Text("Tidak ada gambar yang dipilih")
+                    : Image.file(_image!),
+                ElevatedButton(
+                  onPressed: getImage,
+                  child: const Text("Pilih Gambar"),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          var result = await _controller.addPerson(
+                              Kontak(
+                                  nama: _namaController.text,
+                                  email: _emailController.text,
+                                  alamat: _alamatController.text,
+                                  telepon: _noteleponController.text,
+                                  foto: _image!.path),
+                              _image);
+      
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(result['message'])),
+                          );
+      
+                          Navigator.pushAndRemoveUntil(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeView()),
+                              (route) => false);
+                        }
+                      },
+                      child: const Text("Submit")),
+                )
+              ],
+            ),
+          )),
+    );
   }
 }

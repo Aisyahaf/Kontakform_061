@@ -14,8 +14,9 @@ class FormKontak extends StatefulWidget {
 }
 
 class _FormKontakState extends State<FormKontak> {
+  
+  final kontakController = KontakController();
   final _formKey = GlobalKey<FormState>();
-  final KontakController _controller = KontakController();
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
   final _alamatController = TextEditingController();
@@ -77,7 +78,8 @@ class _FormKontakState extends State<FormKontak> {
                   margin: const EdgeInsets.all(10),
                   child: TextFormField(
                     decoration: const InputDecoration(
-                        labelText: "No Telepon", hintText: "Masukkan No Telepon"),
+                        labelText: "No Telepon",
+                        hintText: "Masukkan No Telepon"),
                     controller: _noteleponController,
                   ),
                 ),
@@ -94,7 +96,7 @@ class _FormKontakState extends State<FormKontak> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          var result = await _controller.addPerson(
+                          var result = await kontakController.addPerson(
                               Kontak(
                                   nama: _namaController.text,
                                   email: _emailController.text,
@@ -102,12 +104,12 @@ class _FormKontakState extends State<FormKontak> {
                                   telepon: _noteleponController.text,
                                   foto: _image!.path),
                               _image);
-      
+
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(result['message'])),
                           );
-      
+
                           Navigator.pushAndRemoveUntil(
                               // ignore: use_build_context_synchronously
                               context,

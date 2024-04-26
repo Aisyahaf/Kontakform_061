@@ -19,7 +19,7 @@ class KontakController {
     try{
     var response = await _service.addPerson(data, file);
 
-    if(response.statusCode == 200){
+    if(response.statusCode == 201){
         return{
           'success' : true,
           'message' : 'Data berhasil disimpan',

@@ -20,9 +20,9 @@ class KontakService {
       ..headers['Content-Type'] = 'application/json';
 
     if (file != null) {
-      request.files.add(await http.MultipartFile.fromPath('gambar', file.path));
+      request.files.add(await http.MultipartFile.fromPath('foto', file.path));
     } else {
-      request.files.add(http.MultipartFile.fromString('gambar', ''));
+      request.files.add(http.MultipartFile.fromString('foto', ''));
     }
     return await http.Response.fromStream(await request.send());
   }

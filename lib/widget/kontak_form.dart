@@ -42,9 +42,9 @@ class _FormKontakState extends State<FormKontak> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text("Form Kontak")
-      // ),
+      appBar: AppBar(
+        title: const Text("Form Kontak")
+      ),
       body: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -105,13 +105,12 @@ class _FormKontakState extends State<FormKontak> {
                                   foto: _image!.path),
                               _image);
 
-                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(result['message'])),
                           );
 
                           Navigator.pushAndRemoveUntil(
-                              // ignore: use_build_context_synchronously
+
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const HomeView()),

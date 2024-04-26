@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:project3_kontakform/controller/kontak_controller.dart';
 import 'package:project3_kontakform/model/kontak.dart';
 import 'package:project3_kontakform/screen/home_view.dart';
+import 'package:project3_kontakform/screen/map_screen.dart';
 
 class FormKontak extends StatefulWidget {
   const FormKontak({super.key});
@@ -14,16 +15,15 @@ class FormKontak extends StatefulWidget {
 }
 
 class _FormKontakState extends State<FormKontak> {
-  
   final kontakController = KontakController();
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
-  final _alamatController = TextEditingController();
   final _noteleponController = TextEditingController();
 
   File? _image;
   final _imagePicker = ImagePicker();
+  String? _alamat;
 
   Future<void> getImage() async {
     final XFile? pickedFile =
@@ -42,9 +42,7 @@ class _FormKontakState extends State<FormKontak> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Form Kontak")
-      ),
+      appBar: AppBar(title: const Text("Form Kontak")),
       body: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -67,11 +65,52 @@ class _FormKontakState extends State<FormKontak> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: "Alamat", hintText: "Masukkan Alamat"),
-                    controller: _alamatController,
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Alamat"),
+                      _alamat == null
+                          ? const SizedBox(
+                              width: double.infinity,
+                              child: Text('Alamat kosong'))
+                          : Text('$_alamat'),
+                      _alamat == null
+                          ? TextButton(
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MapScreen(
+                                        onLocationSelected: (selectedAddress) {
+                                      setState(() {
+                                        _alamat = selectedAddress;
+                                      });
+                                    }),
+                                  ),
+                                );
+                              },
+                              child: const Text('Pilih Alamat'),
+                            )
+                          : TextButton(
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MapScreen(
+                                        onLocationSelected: (selectedAddress) {
+                                      setState(() {
+                                        _alamat = selectedAddress;
+                                      });
+                                    }),
+                                  ),
+                                );
+                                setState(() {});
+                              },
+                              child: const Text('Ubah Alamat'),
+                            ),
+                    ],
                   ),
                 ),
                 Container(
@@ -100,7 +139,7 @@ class _FormKontakState extends State<FormKontak> {
                               Kontak(
                                   nama: _namaController.text,
                                   email: _emailController.text,
-                                  alamat: _alamatController.text,
+                                  alamat: _alamat ?? '',
                                   telepon: _noteleponController.text,
                                   foto: _image!.path),
                               _image);
@@ -110,7 +149,6 @@ class _FormKontakState extends State<FormKontak> {
                           );
 
                           Navigator.pushAndRemoveUntil(
-
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const HomeView()),
